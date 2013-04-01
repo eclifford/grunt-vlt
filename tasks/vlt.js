@@ -40,16 +40,16 @@ module.exports = function(grunt) {
 
       if(status === 'changed') {
         grunt.log.writeln('detected changed filed ' + relativeFilePath);
-        spawn('vlt', ['commit', relativeFilePath], {cwd: cwd});
+        spawn('vlt', ['commit', '--force', relativeFilePath], {cwd: cwd});
       } else if(status === 'added') {
         grunt.log.writeln('detected new filed');
         spawn('vlt', ['add', relativeFilePath], {cwd: cwd}, function() {
-          spawn('vlt', ['commit', relativeFilePath], {cwd: cwd});
+          spawn('vlt', ['commit', '--force', relativeFilePath], {cwd: cwd});
         });
       } else if(status === 'deleted') {
         grunt.log.writeln('detected deleted filed');
         spawn('vlt', ['delete', relativeFilePath], {cwd: cwd}, function() {
-          spawn('vlt', ['commit', relativeFilePath], {cwd: cwd});
+          spawn('vlt', ['commit', '--force', relativeFilePath], {cwd: cwd});
         });
       }
     }); 

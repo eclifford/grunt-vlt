@@ -1,9 +1,9 @@
 # grunt-vlt
 
-> Plugin for automating vlt add/commit/delete
+> Plugin for auto commiting, deleting and adding files from grunt-regarde into CQ's Filevault(VLT)
 
 ## Getting Started
-This plugin requires Grunt `~0.4.1`
+This plugin requires Grunt `~0.4.1` && [Grunt Regarde](https://github.com/yeoman/grunt-regarde)
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
@@ -25,11 +25,8 @@ In your project's Gruntfile, add a section named `vlt` to the data object passed
 ```js
 grunt.initConfig({
   vlt: {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
+    ui: {
+      cwd: 'ui/src/main/content/jcr_root/' // path to current working directory to run VLT commands from
     },
   },
 })
@@ -37,46 +34,31 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.cwd
 Type: `String`
-Default value: `',  '`
+Default value: `''`
 
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
+The path to the current working directory from which to spawn VLT task. Relative to gruntfile.
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+In this example, regarde is listening for file changes and emitting file change events that **grunt-vlt** is listening for. 
 
 ```js
+
 grunt.initConfig({
-  vlt: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+  // regarde does the actual file watching emitting change notifications that VLT picks up
+  regarde: {
+    ui: {
+      files: ['ui/src/main/content/jcr_root/**/*.{txt,css,js,jsp}'],
+      event: true
+    }
   },
-})
-```
-
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
-
-```js
-grunt.initConfig({
+  // VLT then processes the change notifications updates CRX accordingly
   vlt: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+    ui: {
+      cwd: 'ui/src/main/content/jcr_root/' // path to current working directory to run VLT commands from
     },
   },
 })
