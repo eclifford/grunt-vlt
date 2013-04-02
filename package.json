@@ -1,7 +1,7 @@
 {
   "name": "grunt-vlt",
   "description": "Plugin for automating vlt add/commit/delete",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/eric.clifford/grunt-vlt",
   "author": {
     "name": "Eric Clifford",

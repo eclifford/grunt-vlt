@@ -32,26 +32,26 @@ module.exports = function(grunt) {
   };
 
   grunt.registerMultiTask('vlt', 'simple vlt task', function() {
+    var options = this.options({
+      flags: []
+    });
+
     var cwd = this.data.cwd;
+    var args = ['add', grunt.regarde.changed[0].replace(cwd, '')];
 
-    grunt.event.on('regarde:file', function(status, target, filepath){
-      // get path relative to current working directory
-      var relativeFilePath = filepath.replace(cwd, '');
-
-      if(status === 'changed') {
-        grunt.log.writeln('detected changed filed ' + relativeFilePath);
-        spawn('vlt', ['commit', '--force', relativeFilePath], {cwd: cwd});
-      } else if(status === 'added') {
-        grunt.log.writeln('detected new filed');
-        spawn('vlt', ['add', relativeFilePath], {cwd: cwd}, function() {
-          spawn('vlt', ['commit', '--force', relativeFilePath], {cwd: cwd});
-        });
-      } else if(status === 'deleted') {
-        grunt.log.writeln('detected deleted filed');
-        spawn('vlt', ['delete', relativeFilePath], {cwd: cwd}, function() {
-          spawn('vlt', ['commit', '--force', relativeFilePath], {cwd: cwd});
-        });
-      }
-    }); 
+    // Does file still exist
+    if(grunt.file.exists(grunt.regarde.changed[0])) {
+      args = args.concat(options.flags);
+      spawn('vlt', args, {cwd: cwd}, function() {
+        args[0] = 'commit';
+        spawn('vlt', args, {cwd: cwd});
+      });    
+    } else {
+      args[0] = 'delete';
+      spawn('vlt', args, {cwd: cwd}, function() {
+        args[0] = 'commit';
+        spawn('vlt', args, {cwd: cwd});
+      });  
+    }
   });
 };
