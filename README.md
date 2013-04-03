@@ -25,6 +25,9 @@ In your project's Gruntfile, add a section named `vlt` to the data object passed
 ```js
 grunt.initConfig({
   vlt: {
+    options: {
+      flags: ['-v', '--force'] // optional flags to send to VLT 
+    }
     ui: {
       cwd: 'ui/src/main/content/jcr_root/' // path to current working directory to run VLT commands from
     },
@@ -34,16 +37,16 @@ grunt.initConfig({
 
 ### Options
 
-#### options.cwd
-Type: `String`
-Default value: `''`
+#### options.flags
+Type: `Array`
+Default value: `[]`
 
-The path to the current working directory from which to spawn VLT task. Relative to gruntfile.
+The optional flags to send to VLT adds, commits and deletes
 
 ### Usage Examples
 
 #### Default Options
-In this example, regarde is listening for file changes and emitting file change events that **grunt-vlt** is listening for. 
+In this example, regarde is listening for file changes and once detected triggering VLT and passing the changed file(s).
 
 ```js
 
@@ -52,11 +55,14 @@ grunt.initConfig({
   regarde: {
     ui: {
       files: ['ui/src/main/content/jcr_root/**/*.{txt,css,js,jsp}'],
-      event: true
+      tasks: ['vlt']
     }
   },
   // VLT then processes the change notifications updates CRX accordingly
   vlt: {
+    options: {
+      flags: ['-v', '--force'] // optional flags to send to VLT 
+    },
     ui: {
       cwd: 'ui/src/main/content/jcr_root/' // path to current working directory to run VLT commands from
     },

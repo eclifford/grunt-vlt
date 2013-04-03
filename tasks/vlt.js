@@ -36,6 +36,10 @@ module.exports = function(grunt) {
       flags: []
     });
 
+    if(!grunt.regarde.changed[0]) {
+      return;
+    }
+
     var cwd = this.data.cwd;
     var args = ['add', grunt.regarde.changed[0].replace(cwd, '')];
 
@@ -48,10 +52,7 @@ module.exports = function(grunt) {
       });    
     } else {
       args[0] = 'delete';
-      spawn('vlt', args, {cwd: cwd}, function() {
-        args[0] = 'commit';
-        spawn('vlt', args, {cwd: cwd});
-      });  
+      spawn('vlt', args, {cwd: cwd});  
     }
   });
 };
